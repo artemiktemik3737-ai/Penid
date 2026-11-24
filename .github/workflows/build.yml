@@ -210,6 +210,10 @@ jobs:
           B64
           echo "19d9e63ab5bb7915e178f502c39717ee102d2495b4e4269549e81ac7f2c39f91  av.txz" | sha256sum -c
           tar xJf av.txz
+      - name: Fix Effects.java
+        run: |
+          sed -i 's/w\.setTimeOfDay(hourToTicks());/w.setTime(w.getTime(), hourToTicks(), false);/' aurora-visuals/src/main/java/dev/aurora/visuals/Effects.java
+
       - name: Build
         run: gradle build --no-daemon
         working-directory: aurora-visuals
