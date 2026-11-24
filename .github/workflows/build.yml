@@ -1,4 +1,24 @@
-name: build
+name: build       - name: Fix Effects.java
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path("aurora-visuals/src/main/java/dev/aurora/visuals/Effects.java")
+          s = p.read_text()
+
+          s, count = re.subn(
+              r'w\.setTimeOfDay\s*\(\s*hourToTicks\(\)\s*\)\s*;',
+              'w.setTime(w.getTime(), hourToTicks(), false);',
+              s
+          )
+
+          if count != 1:
+              raise SystemExit(f"Ожидалась одна замена, выполнено: {count}")
+
+          p.write_text(s)
+          print("Effects.java исправлен!")
+          PY
 on: [push, workflow_dispatch]
 jobs:
   build:
